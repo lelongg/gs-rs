@@ -13,6 +13,7 @@
 pub mod factor_graph;
 pub mod optimizer;
 pub mod parser;
+#[cfg(feature = "visualizer")]
 pub mod visualizer;
 
 use parser::g2o::G2oParser;

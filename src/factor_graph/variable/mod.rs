@@ -129,6 +129,14 @@ impl Variable {
             Variable::Landmark3D(v) => &v.fixed_type,
         }
     }
+    pub fn get_content(&self) -> Vec<f64> {
+        match self {
+            Variable::Vehicle2D(v) => v.pose.borrow().to_vec(),
+            Variable::Landmark2D(v) => v.position.borrow().to_vec(),
+            Variable::Vehicle3D(v) => v.pose.borrow().to_vec(),
+            Variable::Landmark3D(v) => v.position.borrow().to_vec(),
+        }
+    }
     pub fn set_content(&self, update: Vec<f64>) {
         let u = update;
         match self {

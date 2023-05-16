@@ -30,6 +30,10 @@ travis-ci = { repository = "TNG/gs-rs" }
 coveralls = { repository = "TNG/gs-rs", branch = "master", service = "github" }
 maintenance = { status = "actively-developed" }
 
+[features]
+default = ["visualizer"]
+visualizer = ["kiss3d"]
+
 [dependencies]
 nalgebra = { version = "0.30.1", features = ["sparse"] }
 serde = { version = "1.0.115", features = ["derive"] }
