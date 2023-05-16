@@ -237,17 +237,6 @@ fn get_rot_from_3d(content: &[f64]) -> UnitQuaternion<f32> {
     ))
 }
 
-impl Variable {
-    pub fn get_content(&self) -> Vec<f64> {
-        match self {
-            Variable::Vehicle2D(v) => v.pose.borrow().to_vec(),
-            Variable::Landmark2D(v) => v.position.borrow().to_vec(),
-            Variable::Vehicle3D(v) => v.pose.borrow().to_vec(),
-            Variable::Landmark3D(v) => v.position.borrow().to_vec(),
-        }
-    }
-}
-
 #[cfg(test)]
 mod test {
     use super::*;
