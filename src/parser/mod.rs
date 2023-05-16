@@ -25,7 +25,7 @@ pub trait Parser {
     /// Tries to parse a file at the given path to the internal factor graph representation.
     fn parse_file(file_path: &str) -> Result<FactorGraph, String> {
         match Self::parse_file_to_model(file_path) {
-            Ok(model) => Ok(model.into()),
+            Ok(ref model) => Ok(model.into()),
             Err(s) => Err(s),
         }
     }
@@ -44,15 +44,15 @@ pub trait Parser {
 
     /// Tries to compose a file at the given path containing the serialized factor graph.
     fn compose_file(factor_graph: &FactorGraph, file_path: &str) -> Result<(), String> {
-        Self::compose_model_to_file(factor_graph.into(), file_path)
+        Self::compose_model_to_file(&factor_graph.into(), file_path)
     }
 
     /// Tries to compose a file at the given path containing the factor graph model's serialization.
-    fn compose_model_to_file(model: FactorGraphModel, file_path: &str) -> Result<(), String> {
+    fn compose_model_to_file(model: &FactorGraphModel, file_path: &str) -> Result<(), String> {
         let s = Self::compose_model_to_string(model)?;
         fs::write(file_path, s).map_err(|_| format!("File could not be written to: {}", file_path))
     }
 
     /// Tries to compose a string containing the factor graph model's serialization.
-    fn compose_model_to_string(model: FactorGraphModel) -> Result<String, String>;
+    fn compose_model_to_string(model: &FactorGraphModel) -> Result<String, String>;
 }

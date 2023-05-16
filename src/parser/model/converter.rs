@@ -23,8 +23,8 @@ use petgraph::visit::EdgeRef;
 use std::collections::{BTreeSet, HashMap};
 use std::ops::Index;
 
-impl From<FactorGraphModel> for FactorGraph {
-    fn from(model: FactorGraphModel) -> Self {
+impl From<&FactorGraphModel> for FactorGraph {
+    fn from(model: &FactorGraphModel) -> Self {
         let mut factor_graph = FactorGraph {
             csr: Csr::new(),
             node_indices: vec![],

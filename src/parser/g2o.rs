@@ -49,7 +49,7 @@ impl Parser for G2oParser {
         Ok(model)
     }
 
-    fn compose_model_to_string(model: FactorGraphModel) -> Result<String, String> {
+    fn compose_model_to_string(model: &FactorGraphModel) -> Result<String, String> {
         let mut str_vec: Vec<String> = vec![];
         if model
             .edges
@@ -335,7 +335,7 @@ mod tests {
     #[test]
     fn test_2d_type_composition() {
         let model = get_2d_model();
-        let composed_string = G2oParser::compose_model_to_string(model).unwrap() + "\n";
+        let composed_string = G2oParser::compose_model_to_string(&model).unwrap() + "\n";
         let expected_string = fs::read_to_string("data_files/full_demos/all_2d_types.g2o").unwrap();
         assert_eq!(&composed_string, &expected_string);
     }
@@ -475,7 +475,7 @@ mod tests {
     #[test]
     fn test_3d_type_composition() {
         let model = get_3d_model();
-        let composed_string = G2oParser::compose_model_to_string(model).unwrap();
+        let composed_string = G2oParser::compose_model_to_string(&model).unwrap();
         let expected_string = fs::read_to_string("data_files/full_demos/all_3d_types.g2o").unwrap();
         assert_eq!(&composed_string, &expected_string);
     }
