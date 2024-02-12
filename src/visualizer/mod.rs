@@ -32,7 +32,7 @@ struct VisualFactorGraph {
 /// Displays the visualization of the given factor graph in a new window.
 pub fn visualize(factor_graph: &FactorGraph) {
     let mut window = Window::new("gs-rs");
-    let visual_factor_graph = add_factor_graph_to_window(&mut window, &factor_graph);
+    let visual_factor_graph = add_factor_graph_to_window(&mut window, factor_graph);
     let init_point = match factor_graph.node_indices.len() {
         0 => Point3::new(0.0, 0.0, 0.0),
         _ => get_var_point(factor_graph.get_var(factor_graph.node_indices[0])),
@@ -218,7 +218,7 @@ fn get_factor_point(factor: &Factor) -> Point3<f32> {
         factor.constraint[0] as f32,
         factor.constraint[1] as f32,
         match factor.factor_type {
-            Position2D | Odometry2D | Observation2D => 0.0 as f32,
+            Position2D | Odometry2D | Observation2D => 0.0_f32,
             Position3D | Odometry3D | Observation3D => factor.constraint[2] as f32,
         },
     )

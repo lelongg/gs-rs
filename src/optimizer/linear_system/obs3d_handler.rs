@@ -20,7 +20,7 @@ use nalgebra::{
     DMatrix, DVector, Dynamic, Isometry3, Matrix, Matrix3, MatrixMN, RowVector3, SliceStorage, Translation3, Vector,
     Vector3, U1, U3, U9,
 };
-use nalgebra::storage::Storage;
+
 
 
 pub fn update_H_b(
@@ -31,7 +31,7 @@ pub fn update_H_b(
     var_j: &LandmarkVariable3D,
 ) {
     let iso_i = get_isometry(&*var_i.pose.borrow());
-    let trans_j = get_trans(&*var_j.position.borrow());
+    let trans_j = get_trans(&var_j.position.borrow());
     let local_j = (iso_i.inverse() * trans_j).translation;
     let pos_ij = get_pos(&factor.constraint);
     let (jacobi, jacobi_T) = calc_jacobians(&iso_i, &local_j);
@@ -59,7 +59,7 @@ fn calc_jacobians(
     jacobian.index_mut((.., 0..3)).copy_from(&-Matrix3::<f64>::identity());
     jacobian
         .index_mut((.., 3..6))
-        .copy_from(&skew_trans(&local_j).transpose());
+        .copy_from(&skew_trans(local_j).transpose());
     jacobian.index_mut((.., 6..9)).copy_from(rot_i_inv.matrix());
     (jacobian, jacobian.transpose())
 }

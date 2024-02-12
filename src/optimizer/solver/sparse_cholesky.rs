@@ -28,7 +28,7 @@ impl Solver for SparseCholeskySolver {
         match sparse.l() {
             None => Err(String::from("H is not positive-definite")),
             Some(l) => Ok(l
-                .tr_solve_lower_triangular(&l.solve_lower_triangular(&b).unwrap())
+                .tr_solve_lower_triangular(&l.solve_lower_triangular(b).unwrap())
                 .unwrap()
                 .data
                 .into()),
@@ -70,7 +70,7 @@ mod test {
         );
         let x = match solve_output {
             Ok(sol) => sol,
-            Err(str) => panic!(str),
+            Err(str) => panic!("{}", str),
         };
         assert!(relative_eq!(x[0], 9.0, epsilon = 1e-10));
         assert!(relative_eq!(x[1], 12.0, epsilon = 1e-10));
@@ -95,7 +95,7 @@ mod test {
         );
         let x = match solve_output {
             Ok(sol) => sol,
-            Err(str) => panic!(str),
+            Err(str) => panic!("{}", str),
         };
         info!(
             "TEST FAILED! The solver returned {:?} for not positive-definite H = {:?}",
@@ -122,7 +122,7 @@ mod test {
         );
         let x = match solve_output {
             Ok(sol) => sol,
-            Err(str) => panic!(str),
+            Err(str) => panic!("{}", str),
         };
         info!(
             "TEST FAILED! The solver returned {:?} for not symmetric H = {:?}",
@@ -148,7 +148,7 @@ mod test {
         );
         let x = match solve_output {
             Ok(sol) => sol,
-            Err(str) => panic!(str),
+            Err(str) => panic!("{}", str),
         };
         info!(
             "TEST FAILED! The solver returned {:?} for incompatible dimensions: H = {:?}; b = {:?}",

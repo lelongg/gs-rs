@@ -192,10 +192,10 @@ impl G2oParser {
             "Landmark2D" => tokens.push(String::from("VERTEX_XY")),
             "Vehicle3D" => tokens.push(String::from("VERTEX_SE3:QUAT")),
             "Landmark3D" => tokens.push(String::from("VERTEX_TRACKXYZ")),
-            other_type => panic!(format!(
+            other_type => panic!(
                 "Vertex type unsupported to be composed to G2O format: {}",
                 other_type
-            )),
+            ),
         }
         tokens.push(v.id.to_string());
         Self::append_f64_slice_to_string_vec(&mut tokens, &v.content);
@@ -215,10 +215,10 @@ impl G2oParser {
             "Position3D" => tokens.push(String::from("EDGE_SE3_PRIOR")),
             "Odometry3D" => tokens.push(String::from("EDGE_SE3:QUAT")),
             "Observation3D" => tokens.push(String::from("EDGE_SE3_TRACKXYZ")),
-            other_type => panic!(format!(
+            other_type => panic!(
                 "Edge type unsupported to be composed to G2O format: {}",
                 other_type
-            )),
+            ),
         }
         Self::append_usize_slice_to_string_vec(&mut tokens, e.vertices.as_slice());
         if e.edge_type == "Position3D" || e.edge_type == "Observation3D" {
@@ -229,10 +229,10 @@ impl G2oParser {
             "Position2D" | "Odometry2D" | "Observation3D" => Self::get_upper_triangle_indices(3),
             "Observation2D" => Self::get_upper_triangle_indices(2),
             "Position3D" | "Odometry3D" => Self::get_upper_triangle_indices(6),
-            other_type => panic!(format!(
+            other_type => panic!(
                 "Edge type unsupported to be composed to G2O format: {}",
                 other_type
-            )),
+            ),
         };
         Self::append_f64_slice_elements_to_string_vec(&mut tokens, &e.information_matrix, &upper_triangle);
         tokens.join(" ")

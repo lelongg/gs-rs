@@ -21,7 +21,7 @@ use crate::optimizer::linear_system::iso3d_gradients::{get_isometry, get_isometr
 use crate::optimizer::solver::sparse_cholesky::SparseCholeskySolver;
 use crate::optimizer::solver::Solver;
 use std::f64::consts::PI;
-use nalgebra::storage::Storage;
+
 
 mod linear_system;
 mod solver;
@@ -34,7 +34,7 @@ pub fn optimize(graph: &FactorGraph, iterations: usize) {
 }
 
 fn update_once(factor_graph: &FactorGraph) {
-    let (H, b) = calculate_H_b(&factor_graph);
+    let (H, b) = calculate_H_b(factor_graph);
     // TODO @Daniel: clumsy, since the solver transforms the arguments back to nalgebra matrices
     let sol = SparseCholeskySolver::solve(H, &(b * -1.0)).unwrap();
     factor_graph
@@ -137,7 +137,7 @@ mod tests {
 
         a.edges
             .into_iter()
-            .zip(b.edges.into_iter())
+            .zip(b.edges)
             .enumerate()
             .for_each(|(index, (e1, e2))| {
                 assert_eq!(
@@ -151,7 +151,7 @@ mod tests {
 
                 e1.information_matrix
                     .into_iter()
-                    .zip(e2.information_matrix.into_iter())
+                    .zip(e2.information_matrix)
                     .enumerate()
                     .for_each(|(sub_index, (i1, i2))| {
                         assert_eq!(
@@ -162,7 +162,7 @@ mod tests {
                     });
                 e1.restriction
                     .into_iter()
-                    .zip(e2.restriction.into_iter())
+                    .zip(e2.restriction)
                     .enumerate()
                     .for_each(|(sub_index, (r1, r2))| {
                         assert_eq!(
@@ -173,7 +173,7 @@ mod tests {
                     });
                 e1.vertices
                     .into_iter()
-                    .zip(e2.vertices.into_iter())
+                    .zip(e2.vertices)
                     .enumerate()
                     .for_each(|(sub_index, (v1, v2))| {
                         assert_eq!(
@@ -186,7 +186,7 @@ mod tests {
 
         a.vertices
             .into_iter()
-            .zip(b.vertices.into_iter())
+            .zip(b.vertices)
             .enumerate()
             .for_each(|(index, (v1, v2))| {
                 assert_eq!(v1.id, v2.id);
@@ -195,7 +195,7 @@ mod tests {
 
                 v1.content
                     .into_iter()
-                    .zip(v2.content.into_iter())
+                    .zip(v2.content)
                     .enumerate()
                     .for_each(|(sub_index, (c1, c2))| {
                         assert!(

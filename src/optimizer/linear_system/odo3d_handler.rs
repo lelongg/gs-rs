@@ -22,7 +22,7 @@ use nalgebra::{
     DMatrix, DVector, Dynamic, Isometry3, Matrix, Matrix3, Matrix6, MatrixMN, RowVector6, SliceStorage, Vector, U1,
     U12, U6,
 };
-use nalgebra::storage::Storage;
+
 
 pub fn update_H_b(
     H: &mut DMatrix<f64>,
@@ -62,7 +62,7 @@ fn calc_jacobians(
     let A_rot = A_ij.rotation.to_rotation_matrix();
     let B_rot = B_ij.rotation.to_rotation_matrix();
     let Err_rot = Err_ij.rotation.to_rotation_matrix();
-    let dq_dR = calc_dq_dR(&Err_rot.matrix()); // variable name taken over from g2o
+    let dq_dR = calc_dq_dR(Err_rot.matrix()); // variable name taken over from g2o
 
     let mut jacobian_i = Matrix6::from_vec(vec![0.0; 36]);
     let mut jacobian_j = Matrix6::from_vec(vec![0.0; 36]);
@@ -73,10 +73,10 @@ fn calc_jacobians(
         .copy_from(&(A_rot.matrix() * skew_trans(&B_ij.translation).transpose()));
     jacobian_i
         .index_mut((3.., 3..))
-        .copy_from(&(dq_dR * skew_matr_T_and_mult_parts(&B_rot.matrix(), &A_rot.matrix())));
+        .copy_from(&(dq_dR * skew_matr_T_and_mult_parts(B_rot.matrix(), A_rot.matrix())));
     jacobian_j
         .index_mut((3.., 3..))
-        .copy_from(&(dq_dR * skew_matr_and_mult_parts(&Matrix3::<f64>::identity(), &Err_rot.matrix())));
+        .copy_from(&(dq_dR * skew_matr_and_mult_parts(&Matrix3::<f64>::identity(), Err_rot.matrix())));
 
     let mut jacobian = MatrixMN::<f64, U6, U12>::from_vec(vec![0.0; 72]);
     jacobian.index_mut((.., ..6)).copy_from(&jacobian_i);
